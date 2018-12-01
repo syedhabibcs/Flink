@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from flask_cors import CORS
 import json
 import requests
 
@@ -6,16 +7,13 @@ import threading
 import time
 
 app = Flask(__name__)
+CORS(app)
 
 class Server:
-
-    # This will be set from the user input from the web client
-    lux_svalue = 0
 
     sendBox = {}
     incrementer = 0
     
-
     @app.route('/',methods = ["GET","POST"])
     def index():
         return str(13)
