@@ -1,5 +1,8 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 from flask_cors import CORS
+from werkzeug.utils import secure_filename
+import os
+
 import json
 import requests
 
@@ -7,6 +10,8 @@ import threading
 import time
 
 app = Flask(__name__)
+UPLOAD_DIRECTORY = os.path.abspath(os.path.dirname(__file__)) + "/upload/"
+app.config["UPLOAD_FOLDER"] = UPLOAD_DIRECTORY
 CORS(app)
 
 class Server:
@@ -31,7 +36,7 @@ class Server:
             Server.incrementer = Server.incrementer+1
         return hashedVal
 
-    @app.route("/receive/",methods = ["GET","POST"])
+    @app.route("/receive/", methods=["GET", "POST"])
     def retrieveInfo():
         if request.method == "POST":
             receivedCode = request.json['code']
@@ -41,7 +46,25 @@ class Server:
                 receivedMessage = 'Sorry no message found for the provided code.'
         return receivedMessage
 
+    @app.route('/upload/', methods = ['POST'])
+    def upload_file():
+        file = request.files['']
+        file.save(UPLOAD_DIRECTORY+secure_filename(file.filename))
+        return 'File uploaded successfully'
+
+    @app.route('/download/<filename>')
+    def download_file(filename, methods = ['GET']):
+        return send_from_directory(app.config['UPLOAD_FOLDER'],filename)  
+
+    def uploaded_files():
+        """List the files in the upload directory."""
+        files = []
+        for filename in os.listdir(UPLOAD_DIRECTORY):
+            path = os.path.join(UPLOAD_DIRECTORY, filename)
+            if os.path.isfile(path):
+                files.append(filename)
+        return files
+
 if __name__ == '__main__':
     server = Server()
     app.run(debug=True, host='0.0.0.0')
-
