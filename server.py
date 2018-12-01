@@ -48,10 +48,10 @@ class Server:
 
     @app.route('/upload/', methods = ['POST'])
     def upload_file():
-        file = request.files['']
-        Server.sendBox[Server.incrementer] = file.filename
-        file.save(UPLOAD_DIRECTORY+secure_filename(Server.incrementer))
-        Server.incrementer = Server.incrementer+1
+        for k, file in request.files.items():
+            Server.sendBox[Server.incrementer] = file.filename
+            file.save(UPLOAD_DIRECTORY+secure_filename(str(Server.incrementer)))
+            Server.incrementer = Server.incrementer+1
         return 'File uploaded successfully'
 
     @app.route('/download/<filename>')

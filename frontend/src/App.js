@@ -86,6 +86,10 @@ class App extends Component {
           )}
           {this.transCode && !this.state.receivedData && <p className="text-left">Loading...</p>}
         </div>
+        <form action="http://localhost:5000/upload/" method="post" encType="multipart/form-data">
+            <input type="file" name="dummyname" />
+            <input type="submit" />
+        </form>
       </div>
     );
   }
