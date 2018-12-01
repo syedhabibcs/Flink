@@ -56,7 +56,7 @@ class App extends Component {
           <div className="form-group">
             <input className="form-control" id="sendText" onKeyPress={(event) => { if (event.key === 'Enter') this.sendData() }} onChange={this.handleSendText} rows="3" />
             <br />
-            <button type="button" className="btn btn-primary" onClick={this.sendData}>Generate Token</button>
+            <button type="button" className="btn btn-primary" onClick={this.sendData}>Generate Code</button>
             {this.state.receivedToken !== null &&
               (
                 <div className="text-left m-4">
