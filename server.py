@@ -16,12 +16,15 @@ class Server:
     
     @app.route('/',methods = ["GET","POST"])
     def index():
-        return str(13)
+        return str('Test passed, Server is running!')
             
     @app.route("/send/",methods = ["GET","POST"])
     def getInfo():
         hashedVal = 0
         if request.method == "POST":
+            if Server.incrementer >= 9999: 
+                Server.incrementer = 0
+                Server.sendBox = {}
             sendMessage = request.json['sendBox']
             Server.sendBox[str(Server.incrementer)] = sendMessage
             hashedVal = str(Server.incrementer)
