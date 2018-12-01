@@ -49,17 +49,16 @@ class Server:
     @app.route('/upload/', methods = ['POST'])
     def upload_file():
         for k, file in request.files.items():
-            Server.sendBox[Server.incrementer] = file.filename
-            file.save(UPLOAD_DIRECTORY+secure_filename(str(Server.incrementer)))
+            file.save(UPLOAD_DIRECTORY+secure_filename(str(Server.incrementer) + file.filename))
+            Server.sendBox[Server.incrementer] = str(Server.incrementer) + file.filename
             Server.incrementer = Server.incrementer+1
         return 'File uploaded successfully'
 
-    @app.route('/download/<filename>')
-    def download_file(filename, methods = ['GET']):
-        return send_from_directory(app.config['UPLOAD_FOLDER'], filename)  
+    @app.route('/download/<code>')
+    def download_file(code, methods = ['GET']):
+        return send_from_directory(app.config['UPLOAD_FOLDER'], Server.sendBox[int(code)])  
 
     def uploaded_files():
-        """List the files in the upload directory."""
         files = []
         for filename in os.listdir(UPLOAD_DIRECTORY):
             path = os.path.join(UPLOAD_DIRECTORY, filename)
