@@ -11,91 +11,34 @@ class Server:
 
     # This will be set from the user input from the web client
     lux_svalue = 0
-    led_brightness = 100
 
-    power = 0
-
-    led_brightness_controller = False #false means manual meaning controlled by slider and True means scheduling
-
-    isActionValid = True
-    action=[]
+    sendBox = {}
+    incrementer = 0
+    
 
     @app.route('/',methods = ["GET","POST"])
     def index():
+        return str(13)
+            
+    @app.route("/send/",methods = ["GET","POST"])
+    def getInfo():
+        hashedVal = 0
         if request.method == "POST":
-            Server.lux_svalue = request.form['lux_sensor_value']
-            Server.power = request.form['power']
-        return str(Server.led_brightness)
-            
+            sendMessage = request.json['sendBox']
+            Server.sendBox[str(Server.incrementer)] = sendMessage
+            hashedVal = str(Server.incrementer)
+            Server.incrementer = Server.incrementer+1
+        return hashedVal
 
-    @app.route("/signal/",methods = ["GET","POST"])
-    def setSignal():
+    @app.route("/receive/",methods = ["GET","POST"])
+    def retrieveInfo():
         if request.method == "POST":
-            for field in request.form.keys():
-                value = request.form[field]
-                Server.led_brightness_controller=False
-                Server.led_brightness = value                     
-        return render_template("main.html")
-
-    @app.route("/flux/",methods = ["GET","POST"])
-    def getFluxValue():
-        return json.dumps({'lux_value': str(Server.lux_svalue)})
-
-    @app.route("/action/",methods = ["GET","POST"])
-    def registerAction():
-        if request.method == "POST":
-            
-            user_time = request.form['time']
-
-            addedYMD = time.strftime("%Y")+"-"+time.strftime("%m")+"-"+time.strftime("%d")+" "+user_time
-            dt = datetime.strptime(addedYMD, "%Y-%m-%d %H:%M:%S")
-            unixTime = str(int(time.mktime(dt.timetuple())))
-
-            intensity = str(int(request.form['intensity'])*10)
-            radio = request.form['radio']
-            
-            #
-            if radio == 'true':
-                Server.led_brightness_controller = True
-
-            
-            if Server.led_brightness_controller:
-                
-                if str(time.time())<=unixTime:
-                    
-                    action_temp = dict(Server.action)
-                    action_temp[unixTime] = intensity
-                    Server.action = [(k,v) for (k,v) in action_temp.items()]
-
-                    Server.isActionValid = True
-                    
-                    Server.action = sorted(Server.action, key=lambda tup: (tup[0]))
-                    
-                else:
-                    Server.isActionValid = False
-        return json.dumps(dict(Server.action))
-
-    @app.route("/schedules/",methods = ["GET","POST"])
-    def getSchedules():
-        action_dict = dict(Server.action)
-        action_dict['valid']= Server.isActionValid
-        return json.dumps(action_dict)
-
-    @app.route("/chart/",methods = ["GET","POST"])
-    def getChartValue():
-        timeToCompare = ""
-
-        if Server.led_brightness_controller:
-            string_time = str(int(time.time()))
-            if len(Server.action)>0:
-                timeToCompare = Server.action[0]
-                if string_time >= timeToCompare[0]:
-                    Server.led_brightness = timeToCompare[1]
-                    Server.action.pop(0)
-
-        time_lux = ((int(time.time()), Server.lux_svalue))
-        chart_dic={'seconds': time_lux, 'led_brightness': Server.led_brightness,'power': Server.power}
-        return json.dumps(chart_dic)
+            receivedCode = request.json['code']
+            if receivedCode in Server.sendBox:
+                receivedMessage = Server.sendBox[receivedCode]
+            else:
+                receivedMessage = 'Sorry no message found for the provided code.'
+        return receivedMessage
 
 if __name__ == '__main__':
     server = Server()
