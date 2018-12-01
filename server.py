@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, send_from_directory
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 import os
 
@@ -11,16 +12,14 @@ import time
 app = Flask(__name__)
 UPLOAD_DIRECTORY = os.path.abspath(os.path.dirname(__file__)) + "/upload/"
 app.config["UPLOAD_FOLDER"] = UPLOAD_DIRECTORY
+CORS(app)
 
 class Server:
 
-    # This will be set from the user input from the web client
-    lux_svalue = 0
-
     sendBox = {}
     incrementer = 0
-
-    @app.route('/', methods=["GET", "POST"])
+    
+    @app.route('/',methods = ["GET","POST"])
     def index():
         return str(13)
 
