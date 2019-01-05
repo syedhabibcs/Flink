@@ -1,12 +1,7 @@
-from flask import Flask, render_template, request, send_from_directory, send_file
+from flask import Flask, request, send_file
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
-import os
-import json
-import threading
-import time
-import re
-import random
+import os, json, re, random
 
 app = Flask(__name__)
 UPLOAD_DIRECTORY = os.path.abspath(os.path.dirname(__file__)) + "/upload/"
