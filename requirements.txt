@@ -8,7 +8,6 @@ configparser==3.5.0
 docx==0.2.4
 enum34==1.1.6
 Flask==1.0.2
-futures==3.2.0
 isort==4.3.4
 itsdangerous==1.1.0
 Jinja2==2.10

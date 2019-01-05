@@ -3,7 +3,8 @@ import axios, { post } from 'axios';
 import './App.css';
 
 class App extends Component {
-  url = 'http://localhost:5000/';
+  // url = 'http://localhost:5000/';
+  url = 'https://shareflink.herokuapp.com/';
   sentText = '';
   lastSentText = '';
   transCode = '';
