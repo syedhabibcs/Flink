@@ -3,3 +3,31 @@ Body {
   color: white;
   text-align: center;
 }
+
+.header{
+  margin-top: 5%;
+}
+
+.custom_button {
+  margin-right: 5%;
+  margin-left: 1%;
+  position: absolute;
+}
+
+.form-center{
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+.select-text-tag{
+  width: 22%;
+  margin-left: 32%;
+  margin-top: 2%;
+}
+
+.select-file-tag{
+  width: 60%;
+  margin-left: 20%;
+  margin-top: 2%;
+}
