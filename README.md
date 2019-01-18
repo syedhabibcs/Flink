@@ -1,6 +1,7 @@
-## Hackathon Group Project (Dec 2018)
+## Hackathon Group Project (Dec 2018) 
 
-Application to tranfers links and files without logging in!
+Application to tranfers links and files without logging in! 
+Click [here to try](https://nibrasohin.github.io/flink-frontend/)!
 
 ### Problem we are trying to solve
 
